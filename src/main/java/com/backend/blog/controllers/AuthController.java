@@ -1,7 +1,9 @@
 package com.backend.blog.controllers;
 
+import com.backend.blog.DTOs.DTOJwt;
 import com.backend.blog.DTOs.DTOUser;
 import com.backend.blog.services.AuthService;
+import com.backend.blog.services.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +25,11 @@ public class AuthController
         return ResponseEntity.status(201).body(authService.createUser(user));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<DTOJwt> loginWithUsername(@RequestBody DTOUser data)
+    {
+        String jwt = authService.authUser(data);
+        return ResponseEntity.ok(new DTOJwt(jwt));
+    }
 
 }
