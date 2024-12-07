@@ -26,12 +26,17 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void changePassword(String password)
+    {
+        this.password = password;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
+    @Setter
     private String password;
 
     @Override
