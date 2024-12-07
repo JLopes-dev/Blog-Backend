@@ -31,6 +31,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void changeUsername(String username)
+    {
+        this.username = username;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

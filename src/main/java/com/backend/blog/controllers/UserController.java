@@ -18,10 +18,20 @@ public class UserController {
 
     @PutMapping("/change/password")
     @Transactional
-    public ResponseEntity<DTOUser> updatePasswordUsingUsername(@RequestBody DTOUserUpdated data, HttpServletRequest request)
+    public ResponseEntity<DTOUser> updatePasswordUsingJWT(@RequestBody DTOUserUpdated data, HttpServletRequest request)
     {
         userService.changePasswordByTokenJWT(data, request);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/change/username")
+    @Transactional
+    public ResponseEntity<DTOUser> updateUsernameUsingJWT(@RequestBody DTOUserUpdated data, HttpServletRequest request)
+    {
+        userService.changeUsernameByTokenJWT(data, request);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }

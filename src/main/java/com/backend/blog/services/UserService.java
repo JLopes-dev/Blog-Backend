@@ -32,4 +32,13 @@ public class UserService implements UserDetailsService {
         user.changePassword(new BCryptPasswordEncoder().encode(data.password()));
         return new DTOUser(user.getUsername(), user.getPassword());
     }
+
+    public DTOUser changeUsernameByTokenJWT(DTOUserUpdated data, HttpServletRequest request)
+    {
+        String token = jwtService.getHeader(request);
+        String getUsername = jwtService.verifyToken(token);
+        User user = userRepository.findByUsername(getUsername);
+        user.changeUsername(data.username());
+        return new DTOUser(user.getUsername(), user.getPassword());
+    }
 }
