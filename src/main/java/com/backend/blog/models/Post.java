@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Posts {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +27,10 @@ public class Posts {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    public Post(User user, String title, String description) {
+        this.user = user;
+        this.title = title;
+        this.description = description;
+    }
 }
