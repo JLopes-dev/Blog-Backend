@@ -26,19 +26,22 @@ public class UserService implements UserDetailsService {
 
     public DTOUser changePasswordByTokenJWT(DTOUserUpdated data, HttpServletRequest request)
     {
-        String token = jwtService.getHeader(request);
-        String getUsername = jwtService.verifyToken(token);
-        User user = userRepository.findByUsername(getUsername);
+        User user = findUserByJWTToken(request);
         user.changePassword(new BCryptPasswordEncoder().encode(data.password()));
         return new DTOUser(user.getUsername(), user.getPassword());
     }
 
     public DTOUser changeUsernameByTokenJWT(DTOUserUpdated data, HttpServletRequest request)
     {
-        String token = jwtService.getHeader(request);
-        String getUsername = jwtService.verifyToken(token);
-        User user = userRepository.findByUsername(getUsername);
+        User user = findUserByJWTToken(request);
         user.changeUsername(data.username());
         return new DTOUser(user.getUsername(), user.getPassword());
+    }
+
+    public User findUserByJWTToken(HttpServletRequest request)
+    {
+        String token = jwtService.getHeader(request);
+        String getUsername = jwtService.verifyToken(token);
+        return userRepository.findByUsername(getUsername);
     }
 }
