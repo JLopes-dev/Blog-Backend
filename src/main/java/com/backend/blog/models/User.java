@@ -41,7 +41,6 @@ public class User implements UserDetails {
     private Long id;
 
     private String username;
-    @Setter
     private String password;
 
     @Override

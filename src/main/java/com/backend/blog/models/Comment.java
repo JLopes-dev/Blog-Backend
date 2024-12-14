@@ -14,15 +14,21 @@ import lombok.Setter;
 @Table(name = "comments")
 public class Comment {
 
+    public Comment(User user, Post post, String description) {
+        this.user = user;
+        this.post = post;
+        this.description = description;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
