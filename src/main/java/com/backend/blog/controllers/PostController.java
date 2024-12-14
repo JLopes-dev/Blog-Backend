@@ -1,15 +1,15 @@
 package com.backend.blog.controllers;
 
 import com.backend.blog.DTOs.DTOPost;
-import com.backend.blog.models.Post;
+import com.backend.blog.DTOs.DTOPostNotUser;
 import com.backend.blog.services.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/post")
@@ -18,7 +18,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PostMapping("/create")
+    @PostMapping
     @Transactional
     public ResponseEntity<DTOPost> createPost(@RequestBody DTOPost data, HttpServletRequest request)
     {
@@ -26,12 +26,32 @@ public class PostController {
         return ResponseEntity.status(201).body(postCreated);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Page<Post>> findAllPosts(
+    @GetMapping
+    public ResponseEntity<List<DTOPostNotUser>> findAllPosts(
             HttpServletRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size)
     {
-        return ResponseEntity.ok(postService.findAllPostsByUser(request, page, size));
+        return ResponseEntity.ok(postService.findAllPostsByUser(request, page, size)
+                .stream()
+                .map(post -> new DTOPostNotUser(post.getTitle(), post.getDescription())).toList());
     }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<DTOPostNotUser> updatedPost(@RequestParam Long id, @RequestBody DTOPostNotUser data)
+    {
+        DTOPostNotUser newData = postService.updatedPostById(id, data);
+        return ResponseEntity.ok(newData);
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity deletePost(@RequestParam Long id)
+    {
+        postService.deletePostById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

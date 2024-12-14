@@ -11,8 +11,4 @@ public record DTOPost(
         String title,
         @NotBlank
         String description
-) {
-        public DTOPost(String title, String description) {
-                this(null, title, description);
-        }
-}
+) {}

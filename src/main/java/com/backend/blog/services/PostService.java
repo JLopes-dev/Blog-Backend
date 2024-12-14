@@ -1,6 +1,7 @@
 package com.backend.blog.services;
 
 import com.backend.blog.DTOs.DTOPost;
+import com.backend.blog.DTOs.DTOPostNotUser;
 import com.backend.blog.models.Post;
 import com.backend.blog.models.User;
 import com.backend.blog.repositories.PostRepository;
@@ -11,9 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -34,8 +37,25 @@ public class PostService {
     public Page<Post> findAllPostsByUser(HttpServletRequest request, int page, int size)
     {
         User user = userService.findUserByJWTToken(request);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("title").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
         return postRepository.findByUserId(user.getId(), pageable);
     }
+
+    public DTOPostNotUser updatedPostById(Long id, DTOPostNotUser data)
+    {
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent())
+        {
+            post.get().changeTitleOrDescription(data);
+            return new DTOPostNotUser(post.get().getTitle(), post.get().getDescription());
+        }
+        else { throw new RuntimeException("Houve um erro ao tentar encontrar o registro"); }
+    }
+     public void deletePostById(Long id)
+     {
+         Optional<Post> post = postRepository.findById(id);
+         post.ifPresent(value -> postRepository.deleteById(value.getId()));
+         if (post.isEmpty()) { throw new RuntimeException("Houve um erro ao tentar encontrar o registro"); }
+     }
 
 }

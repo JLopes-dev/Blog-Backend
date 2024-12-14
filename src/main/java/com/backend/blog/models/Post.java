@@ -1,5 +1,6 @@
 package com.backend.blog.models;
 
+import com.backend.blog.DTOs.DTOPostNotUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post {
+
+    public void changeTitleOrDescription(DTOPostNotUser data)
+    {
+        if (data.title() != null)
+        {
+            this.title = data.title();
+        }
+        if (data.description() != null)
+        {
+            this.description = data.description();
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

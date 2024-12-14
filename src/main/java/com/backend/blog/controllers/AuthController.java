@@ -3,7 +3,6 @@ package com.backend.blog.controllers;
 import com.backend.blog.DTOs.DTOJwt;
 import com.backend.blog.DTOs.DTOUser;
 import com.backend.blog.services.AuthService;
-import com.backend.blog.services.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
