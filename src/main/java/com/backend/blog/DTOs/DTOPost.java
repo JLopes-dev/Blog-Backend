@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record DTOPost(
         User user,
-        @NotBlank
+        @NotNull
         String title,
-        @NotBlank
+        @NotNull
         String description
 ) {}

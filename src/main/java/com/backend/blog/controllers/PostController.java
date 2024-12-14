@@ -4,6 +4,7 @@ import com.backend.blog.DTOs.DTOPost;
 import com.backend.blog.DTOs.DTOPostNotUser;
 import com.backend.blog.services.PostService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class PostController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DTOPost> createPost(@RequestBody DTOPost data, HttpServletRequest request)
+    public ResponseEntity<DTOPost> createPost(@RequestBody @Valid DTOPost data, HttpServletRequest request)
     {
         DTOPost postCreated = postService.createPostUsingJWT(data, request);
         return ResponseEntity.status(201).body(postCreated);
@@ -47,9 +48,9 @@ public class PostController {
 
     @DeleteMapping
     @Transactional
-    public ResponseEntity deletePost(@RequestParam Long id)
+    public ResponseEntity deletePost(@RequestParam Long id, HttpServletRequest request)
     {
-        postService.deletePostById(id);
+        postService.deletePostById(id, request);
         return ResponseEntity.noContent().build();
     }
 

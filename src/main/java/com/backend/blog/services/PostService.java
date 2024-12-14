@@ -51,11 +51,18 @@ public class PostService {
         }
         else { throw new RuntimeException("Houve um erro ao tentar encontrar o registro"); }
     }
-     public void deletePostById(Long id)
+     public void deletePostById(Long id, HttpServletRequest request)
      {
          Optional<Post> post = postRepository.findById(id);
-         post.ifPresent(value -> postRepository.deleteById(value.getId()));
-         if (post.isEmpty()) { throw new RuntimeException("Houve um erro ao tentar encontrar o registro"); }
+         if (post.isPresent())
+         {
+             if (post.get().getUser().getUsername().equals(userService.findUserByJWTToken(request).getUsername()))
+             {
+                 postRepository.deleteById(post.get().getId());
+             }
+         }
+         else {
+             throw new RuntimeException("Sem Autorização ou ID inválido");
+         }
      }
-
 }

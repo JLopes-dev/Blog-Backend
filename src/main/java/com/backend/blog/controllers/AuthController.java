@@ -3,6 +3,7 @@ package com.backend.blog.controllers;
 import com.backend.blog.DTOs.DTOJwt;
 import com.backend.blog.DTOs.DTOUser;
 import com.backend.blog.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,13 @@ public class AuthController
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<DTOUser> createNewUserInDatabase(@RequestBody DTOUser user)
+    public ResponseEntity<DTOUser> createNewUserInDatabase(@RequestBody @Valid DTOUser user)
     {
         return ResponseEntity.status(201).body(authService.createUser(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<DTOJwt> loginWithUsername(@RequestBody DTOUser data)
+    public ResponseEntity<DTOJwt> loginWithUsername(@RequestBody @Valid DTOUser data)
     {
         String jwt = authService.authUser(data);
         return ResponseEntity.ok(new DTOJwt(jwt));

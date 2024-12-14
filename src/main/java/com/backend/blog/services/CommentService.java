@@ -34,4 +34,9 @@ public class CommentService {
         throw new RuntimeException("Post não Encontrado");
     }
 
+    public void deleteCommentService(Long id)
+    {
+        commentRepository.deleteById(id);
+    }
+
 }
