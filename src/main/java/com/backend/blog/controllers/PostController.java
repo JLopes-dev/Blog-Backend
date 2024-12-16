@@ -36,7 +36,7 @@ public class PostController {
     {
         return ResponseEntity.ok(postService.findAllPostsByUser(request, page, size)
                 .stream()
-                .map(post -> new DTOPostNotUser(post.getTitle(), post.getDescription())).toList());
+                .map(post -> new DTOPostNotUser(post.getId(), post.getTitle(), post.getDescription())).toList());
     }
 
     @PutMapping("/update")

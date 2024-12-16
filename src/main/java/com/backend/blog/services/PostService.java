@@ -44,7 +44,7 @@ public class PostService {
         if (post.isPresent())
         {
             post.get().changeTitleOrDescription(data);
-            return new DTOPostNotUser(post.get().getTitle(), post.get().getDescription());
+            return new DTOPostNotUser(post.get().getId(), post.get().getTitle(), post.get().getDescription());
         }
         else { throw new RuntimeException("Houve um erro ao tentar encontrar o registro"); }
     }

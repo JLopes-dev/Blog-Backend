@@ -9,6 +9,10 @@ import com.backend.blog.repositories.CommentRepository;
 import com.backend.blog.repositories.PostRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -64,6 +68,13 @@ public class CommentService {
         }
 
         throw new RuntimeException("Sem Autorização ou ID inválido");
+    }
+
+    public Page<Comment> showAllCommentsByUserId(HttpServletRequest request, int page, int size)
+    {
+        User user = userService.findUserByJWTToken(request);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("description").ascending());
+        return commentRepository.findByUserId(user.getId(), pageable);
     }
 
 }
