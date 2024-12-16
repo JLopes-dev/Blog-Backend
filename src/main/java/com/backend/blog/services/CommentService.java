@@ -1,6 +1,7 @@
 package com.backend.blog.services;
 
 import com.backend.blog.DTOs.DTOComment;
+import com.backend.blog.DTOs.DTOCommentNewDescription;
 import com.backend.blog.models.Comment;
 import com.backend.blog.models.Post;
 import com.backend.blog.models.User;
@@ -34,9 +35,35 @@ public class CommentService {
         throw new RuntimeException("Post não Encontrado");
     }
 
-    public void deleteCommentService(Long id)
+    public void deleteCommentService(Long id, HttpServletRequest request)
     {
-        commentRepository.deleteById(id);
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (comment.isPresent())
+        {
+            if (comment.get().getUser().getUsername().equals(userService.findUserByJWTToken(request).getUsername()))
+            {
+                commentRepository.deleteById(id);
+            }
+        }
+        else
+        {
+            throw new RuntimeException("Sem Autorização ou ID inválido");
+        }
+    }
+
+    public Comment updateCommentService(Long id, DTOCommentNewDescription data, HttpServletRequest request)
+    {
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (comment.isPresent())
+        {
+            if (comment.get().getUser().getUsername().equals(userService.findUserByJWTToken(request).getUsername()))
+            {
+                comment.get().updateDescription(data.description());
+                return new Comment(comment.get().getId(), comment.get().getUser(), comment.get().getPost(), comment.get().getDescription());
+            }
+        }
+
+        throw new RuntimeException("Sem Autorização ou ID inválido");
     }
 
 }

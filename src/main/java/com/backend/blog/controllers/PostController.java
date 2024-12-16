@@ -2,6 +2,7 @@ package com.backend.blog.controllers;
 
 import com.backend.blog.DTOs.DTOPost;
 import com.backend.blog.DTOs.DTOPostNotUser;
+import com.backend.blog.models.Post;
 import com.backend.blog.services.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -19,15 +20,15 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PostMapping
+    @PostMapping("/create")
     @Transactional
     public ResponseEntity<DTOPost> createPost(@RequestBody @Valid DTOPost data, HttpServletRequest request)
     {
-        DTOPost postCreated = postService.createPostUsingJWT(data, request);
-        return ResponseEntity.status(201).body(postCreated);
+        Post postCreated = postService.createPostUsingJWT(data, request);
+        return ResponseEntity.status(201).body(new DTOPost(postCreated.getId(), postCreated.getUser(), postCreated.getTitle(), postCreated.getDescription()));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<DTOPostNotUser>> findAllPosts(
             HttpServletRequest request,
             @RequestParam(defaultValue = "0") int page,
@@ -38,7 +39,7 @@ public class PostController {
                 .map(post -> new DTOPostNotUser(post.getTitle(), post.getDescription())).toList());
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @Transactional
     public ResponseEntity<DTOPostNotUser> updatedPost(@RequestParam Long id, @RequestBody DTOPostNotUser data)
     {
@@ -46,7 +47,7 @@ public class PostController {
         return ResponseEntity.ok(newData);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     @Transactional
     public ResponseEntity deletePost(@RequestParam Long id, HttpServletRequest request)
     {

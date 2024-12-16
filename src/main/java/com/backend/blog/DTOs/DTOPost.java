@@ -5,9 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record DTOPost(
+        Long id,
         User user,
-        @NotNull
+        @NotBlank
         String title,
-        @NotNull
+        @NotBlank
         String description
 ) {}

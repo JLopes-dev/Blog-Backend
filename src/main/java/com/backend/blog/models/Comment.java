@@ -34,4 +34,8 @@ public class Comment {
 
     private String description;
 
+    public void updateDescription(String description)
+    {
+        this.description = description;
+    }
 }
