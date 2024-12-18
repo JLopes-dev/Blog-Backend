@@ -47,8 +47,8 @@ public class CommentController {
         return ResponseEntity.status(201).body(new DTOCommentFull(commentUpdated.getId(), commentUpdated.getUser(), commentUpdated.getPost(), commentUpdated.getDescription()));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<DTOCommentFullNotUser>> showAllComments(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
-        return ResponseEntity.ok(commentService.showAllCommentsByUserId(request, page, size).stream().map(comment -> new DTOCommentFullNotUser(comment.getId(), comment.getPost(), comment.getDescription())).toList());
+    @GetMapping("/all/user")
+    public ResponseEntity<List<DTOCommentFull>> showAllCommentsByUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
+        return ResponseEntity.ok(commentService.showAllCommentsByUserIdService(request, page, size).stream().map(comment -> new DTOCommentFull(comment.getId(),comment.getUser(), comment.getPost(), comment.getDescription())).toList());
     }
 }

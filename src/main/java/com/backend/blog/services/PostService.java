@@ -38,6 +38,12 @@ public class PostService {
         return postRepository.findByUserId(user.getId(), pageable);
     }
 
+    public Page<Post> showAllPostsService(int page, int size)
+    {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        return postRepository.findAll(pageable);
+    }
+
     public DTOPostNotUser updatedPostById(Long id, DTOPostNotUser data)
     {
         Optional<Post> post = postRepository.findById(id);

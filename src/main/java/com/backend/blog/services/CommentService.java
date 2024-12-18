@@ -70,11 +70,10 @@ public class CommentService {
         throw new RuntimeException("Sem Autorização ou ID inválido");
     }
 
-    public Page<Comment> showAllCommentsByUserId(HttpServletRequest request, int page, int size)
+    public Page<Comment> showAllCommentsByUserIdService(HttpServletRequest request, int page, int size)
     {
         User user = userService.findUserByJWTToken(request);
         Pageable pageable = PageRequest.of(page, size, Sort.by("description").ascending());
         return commentRepository.findByUserId(user.getId(), pageable);
     }
-
 }

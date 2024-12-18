@@ -2,6 +2,7 @@ package com.backend.blog.controllers;
 
 import com.backend.blog.DTOs.DTOPost;
 import com.backend.blog.DTOs.DTOPostNotUser;
+import com.backend.blog.DTOs.DTOPostUsername;
 import com.backend.blog.models.Post;
 import com.backend.blog.services.PostService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +29,8 @@ public class PostController {
         return ResponseEntity.status(201).body(new DTOPost(postCreated.getId(), postCreated.getUser(), postCreated.getTitle(), postCreated.getDescription()));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<DTOPostNotUser>> findAllPosts(
+    @GetMapping("/all/user")
+    public ResponseEntity<List<DTOPostNotUser>> findAllPostsByUser(
             HttpServletRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size)
@@ -37,6 +38,11 @@ public class PostController {
         return ResponseEntity.ok(postService.findAllPostsByUser(request, page, size)
                 .stream()
                 .map(post -> new DTOPostNotUser(post.getId(), post.getTitle(), post.getDescription())).toList());
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<DTOPostUsername>> findAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size)
+    {
+        return ResponseEntity.ok(postService.showAllPostsService(page, size).stream().map(post -> new DTOPostUsername(post.getId(), post.getUser().getUsername(), post.getTitle(), post.getDescription())).toList());
     }
 
     @PutMapping("/update")
